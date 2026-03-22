@@ -48,10 +48,10 @@ input:checked + .slider:before { transform: translateX(24px); }
     The Curator
 </div>
 <div class="flex items-center gap-6">
-    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200">
-        <span class="material-symbols-outlined" data-icon="search">search</span>
+    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/profile.html'">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
     </button>
-    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/#cart'">
+    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/cart.html'">
         <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
     </button>
 </div>
@@ -69,11 +69,11 @@ input:checked + .slider:before { transform: translateX(24px); }
                 Artisanal Crafts for the Modern Connoisseur. Discover a curated selection of timeless treasures.
             </p>
             <div class="mt-10 flex gap-4">
-                <button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:opacity-90 transition-opacity duration-200">
+                <button onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:opacity-90 transition-opacity duration-200">
                     Explore Collection
                 </button>
-                <button class="border border-outline-variant/20 text-on-surface px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:bg-surface-container transition-colors">
-                    Our Story
+                <button onclick="window.location.href='/request.html'" class="border border-outline-variant/20 text-on-surface px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:bg-surface-container transition-colors">
+                    Custom Crafts
                 </button>
             </div>
         </div>
@@ -100,7 +100,7 @@ input:checked + .slider:before { transform: translateX(24px); }
 </div>
 <!-- Static Categories here -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer">
+    <div onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})" class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer">
         <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9EdYmGh34y9WsSiYMwvCUhKZCsHURUgJh6tt2D8AXOCmvckw6WlAIOb1qOv8e_uyzWgecLTDqsrvHtfdGOTP-b6I7rtcVAPKtHlbMLZ9W5q35kPF5rmTNKeKeypLFz8xULdLWf14ezMBM_YFOM_c7enb6hf_XXRxlDnMDmIFgvTomSqO39wCK-VD1aDD7MoJ7Uo5kfHsf4AFgozYPILWbDGTr9p8z7cN19R5CdkRXozInhoKaLQ3SxBQLxb8k7oZeExNVjqlz4AI"/>
         <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
         <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Heritage Pieces</span><h3 class="text-2xl font-headline text-white font-bold">Antique Jewelry</h3></div>
@@ -125,7 +125,7 @@ input:checked + .slider:before { transform: translateX(24px); }
 </section>
 
 <!-- Bestsellers / New Arrivals Carousel (DYNAMIC API DATA) -->
-<section class="py-24 bg-surface-container-low">
+<section id="catalog" class="py-24 bg-surface-container-low">
     <div class="container mx-auto px-8">
         <div class="flex justify-between items-center mb-12">
             <h2 class="text-3xl font-headline font-bold text-on-surface">The <span class="serif-italic">Season's Best</span></h2>
@@ -191,8 +191,9 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <div class="aspect-[4/5] overflow-hidden bg-surface-container-low relative">
                         <!-- Use backend image if available or fallback -->
                         <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <button class="bg-surface-container-lowest text-on-surface px-6 py-2 uppercase text-xs tracking-widest font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform" onclick="alert('Added to cart!')">Add to Cart</button>
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
+                            <button class="bg-surface-container-lowest text-on-surface px-6 py-2 uppercase text-xs tracking-widest font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform" onclick="window.location.href='/product.html?id=${product.id}'">View Details</button>
+                            <button class="bg-primary text-white border-none px-6 py-2 uppercase text-xs tracking-widest font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform" onclick="addToCartFn(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
                         </div>
                     </div>
                     <div class="p-6">
@@ -210,6 +211,19 @@ input:checked + .slider:before { transform: translateX(24px); }
             console.error("Error fetching products:", error);
             document.getElementById('dynamic-products-container').innerHTML = `<div class="p-8 text-error">Failed to load live catalog data.</div>`;
         }
+    }
+
+    // Real Cart Add Logic for Index Page
+    function addToCartFn(id, name, price) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existing = cart.find(i => i.id === id);
+        if(existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({ id, name, price, qty: 1 });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert('Added ' + name + ' to your bag!');
     }
 
     // Load products on start

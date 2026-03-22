@@ -10,89 +10,316 @@
         body { background-color: #f9f9f9; }
         .dashboard { display: flex; min-height: 100vh; }
         .sidebar { width: 250px; background: #fff; padding: 2rem; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
-        .sidebar h2 { font-family: 'Noto Serif', serif; color: #b76e22; margin-bottom: 2rem; }
-        .sidebar a { display: block; padding: 1rem 0; color: #333; text-decoration: none; border-bottom: 1px solid #eee; }
-        .sidebar a:hover { color: #b76e22; }
+        .sidebar h2 { font-family: 'Noto Serif', serif; color: #9c3032; margin-bottom: 2rem; cursor: pointer; }
+        .sidebar button { display: block; width: 100%; text-align: left; background: none; border: none; padding: 1rem 0; color: #333; font-weight: 600; font-size: 1rem; cursor: pointer; border-bottom: 1px solid #eee; }
+        .sidebar button:hover { color: #9c3032; }
         .main-content { flex: 1; padding: 2rem; }
-        .card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        .card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem; display: none; }
+        .card.active { display: block; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
         th { font-weight: 600; color: #666; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; font-size: 0.85rem; text-transform: uppercase; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; }
     </style>
 </head>
 <body>
+
     <div class="dashboard">
         <div class="sidebar">
-            <h2 style="cursor: pointer;" onclick="window.location.href='/'">Kaajtaanka</h2>
-            <a href="#" onclick="showSection('products')">Products</a>
-            <a href="#" onclick="showSection('orders')">Orders</a>
-            <a href="#" onclick="showSection('requests')">Custom Requests</a>
-            <a href="#" onclick="window.location.href='/'">← Back to Store</a>
+            <h2 onclick="window.location.href='/'">The Curator</h2>
+            <button onclick="showSection('products-section')">Manage Products</button>
+            <button onclick="showSection('orders-section')">View Orders</button>
+            <button onclick="showSection('requests-section')">Custom Requests</button>
+            <br><hr><br>
+            <button onclick="logout()">Logout</button>
+            <button onclick="window.location.href='/'">← Back to Store</button>
         </div>
+
         <div class="main-content">
-            <header>
+            <header style="margin-bottom: 2rem;">
                 <h1>Admin Dashboard</h1>
+                <p style="color: #666; font-size: 0.9rem;">Manage your store inventory, orders, and design requests.</p>
             </header>
 
-            <div id="products-section" class="card">
-                <h3>Manage Products</h3>
-                <button class="btn-primary" style="margin-top: 1rem;">+ Add Product</button>
+            <!-- PRODUCTS SECTION -->
+            <div id="products-section" class="card active">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Products Catalog</h3>
+                    <button class="btn-primary" onclick="openModal('addProductModal')">+ Upload New Product</button>
+                </div>
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Price</th>
                             <th>Stock</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="products-table">
-                        <!-- Products will be loaded here via JS -->
-                        <tr><td colspan="6" style="text-align:center;">Loading products...</td></tr>
+                        <tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Additional sections (Orders, Requests) go here... hidden by default -->
+            <!-- ORDERS SECTION -->
+            <div id="orders-section" class="card">
+                <h3>All Customer Orders</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User ID</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table">
+                        <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- REQUESTS SECTION -->
+            <div id="requests-section" class="card">
+                <h3>Custom Jewelry Commissions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Description</th>
+                            <th>Reference Image</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requests-table">
+                        <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD PRODUCT MODAL -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addProductModal')">&times;</span>
+            <h2 style="font-family: 'Noto Serif', serif; margin-bottom: 1.5rem; color: #9c3032;">Upload New Product</h2>
+            <form id="addProductForm">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="p_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="p_desc" rows="3" required></textarea>
+                </div>
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <div style="flex:1;">
+                        <label>Price ($)</label>
+                        <input type="number" id="p_price" step="0.01" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label>Stock Quantity</label>
+                        <input type="number" id="p_stock" value="1" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="p_cat" required>
+                        <option value="Jewelry">Jewelry</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Watches">Watches</option>
+                        <option value="Perfumes">Perfumes</option>
+                        <option value="Honey">Honey</option>
+                        <option value="Custom">Custom</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="url" id="p_img" placeholder="https://..." required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Save Product</button>
+            </form>
         </div>
     </div>
 
     <script>
-        function showSection(section) {
-            // Logic to switch tabs and fetch data from the APIs
-            console.log("Navigating to", section);
-            if(section === 'products') fetchProducts();
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("No token found. Please log in as admin.");
+            window.location.href = '/login.html';
         }
 
+        function showSection(id) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if (id === 'products-section') fetchProducts();
+            if (id === 'orders-section') fetchOrders();
+            if (id === 'requests-section') fetchRequests();
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = "block"; }
+        function closeModal(id) { document.getElementById(id).style.display = "none"; }
+        function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
+
+        // Fetch Products
         async function fetchProducts() {
             try {
-                const response = await fetch('/api/products');
-                const products = await response.json();
+                const res = await fetch('/api/products');
+                const products = await res.json();
                 const tbody = document.getElementById('products-table');
                 
-                if(products.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products found.</td></tr>';
+                if (products.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products in database.</td></tr>';
                     return;
                 }
 
                 tbody.innerHTML = products.map(p => `
                     <tr>
-                        <td>${p.id}</td>
-                        <td>${p.name}</td>
+                        <td><img src="${p.imageUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
+                        <td style="font-weight: bold;">${p.name}</td>
                         <td>${p.category}</td>
                         <td>$${p.price}</td>
                         <td>${p.stock}</td>
-                        <td><button class="btn-primary" style="padding: 0.5rem; font-size: 0.8rem;">Edit</button></td>
+                        <td><button onclick="deleteProduct(${p.id})" style="color: red; background: none; border: none; cursor: pointer; text-decoration: underline;">Delete</button></td>
                     </tr>
                 `).join('');
-            } catch (err) {
-                console.error("Failed to fetch products", err);
+            } catch (err) { console.error(err); }
+        }
+
+        // Add Product Event
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newProduct = {
+                name: document.getElementById('p_name').value,
+                description: document.getElementById('p_desc').value,
+                price: parseFloat(document.getElementById('p_price').value),
+                stock: parseInt(document.getElementById('p_stock').value),
+                category: document.getElementById('p_cat').value,
+                imageUrl: document.getElementById('p_img').value
+            };
+
+            try {
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(newProduct)
+                });
+                if (res.ok) {
+                    alert("Product uploaded successfully!");
+                    closeModal('addProductModal');
+                    document.getElementById('addProductForm').reset();
+                    fetchProducts(); // refresh table
+                } else {
+                    const error = await res.json();
+                    alert("Failed to add product: " + (error.message || "Unauthorized"));
+                }
+            } catch (err) { console.error(err); alert("Error saving product."); }
+        });
+
+        // Delete Product
+        async function deleteProduct(id) {
+            if(confirm("Are you sure you want to delete this product?")) {
+                const res = await fetch(`/api/products/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if(res.ok) fetchProducts();
+                else alert("Failed. Usually means you are not logged in as Admin.");
             }
         }
 
-        // Load initial data
+        // Fetch Orders
+        async function fetchOrders() {
+            const tbody = document.getElementById('orders-table');
+            try {
+                const res = await fetch('/api/orders', { headers: { 'Authorization': `Bearer ${token}` } });
+                if(!res.ok) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Unauthorized to view orders.</td></tr>'; return; }
+                const data = await res.json();
+                if(data.length === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No orders found.</td></tr>';
+                else {
+                    tbody.innerHTML = data.map(o => `
+                        <tr>
+                            <td>#${o.id}</td>
+                            <td>${o.userId}</td>
+                            <td>$${o.totalAmount}</td>
+                            <td><strong>${o.status}</strong></td>
+                            <td>
+                                <select onchange="updateOrderStatus(${o.id}, this.value)">
+                                    <option value="" disabled selected>Change Status</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function updateOrderStatus(id, status) {
+            const res = await fetch(`/api/orders/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ status })
+            });
+            if(res.ok) fetchOrders();
+        }
+
+        // Fetch Requests
+        async function fetchRequests() {
+            const tbody = document.getElementById('requests-table');
+            try {
+                const res = await fetch('/api/requests', { headers: { 'Authorization': `Bearer ${token}` } });
+                if(!res.ok) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Unauthorized.</td></tr>'; return; }
+                const data = await res.json();
+                if(data.length === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No requests found.</td></tr>';
+                else {
+                    tbody.innerHTML = data.map(r => `
+                        <tr>
+                            <td>#${r.id}</td>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${r.description}</td>
+                            <td>${r.designUrl ? `<a href="${r.designUrl}" target="_blank">View Image</a>` : 'N/A'}</td>
+                            <td><strong>${r.status}</strong></td>
+                            <td>
+                                <select onchange="updateRequestStatus(${r.id}, this.value)">
+                                    <option value="" disabled selected>Change Status</option>
+                                    <option value="Reviewed">Reviewed</option>
+                                    <option value="Accepted">Accepted</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        async function updateRequestStatus(id, status) {
+            const res = await fetch(`/api/requests/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ status })
+            });
+            if(res.ok) fetchRequests();
+        }
+
+        // Initialize
         fetchProducts();
     </script>
 </body>
