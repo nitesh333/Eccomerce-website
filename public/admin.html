@@ -232,50 +232,17 @@
         function closeModal(id) { document.getElementById(id).style.display = "none"; }
         function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
 
-        // --- IMAGE COMPRESSION & UPLOAD HELPER ---
-        async function compressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        
-                        // Smart scale down: Max dimension 800px
-                        const MAX_SIZE = 800;
-                        if (width > height && width > MAX_SIZE) {
-                            height *= MAX_SIZE / width;
-                            width = MAX_SIZE;
-                        } else if (height > MAX_SIZE) {
-                            width *= MAX_SIZE / height;
-                            height = MAX_SIZE;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        // Compress into 80% quality JPEG
-                        canvas.toBlob((blob) => { resolve(blob); }, 'image/jpeg', 0.8);
-                    };
-                };
-            });
-        }
-
+        // --- IMAGE UPLOAD HELPER ---
         async function uploadFile(fileInput) {
             const rawFile = fileInput.files[0];
-            const compressedBlob = await compressImage(rawFile);
-
             const formData = new FormData();
-            formData.append('image', compressedBlob, "product_optimized.jpg");
+            formData.append('image', rawFile);
 
             const res = await fetch('/api/upload', { method: 'POST', body: formData });
-            if(!res.ok) throw new Error("Image upload failed");
+            if(!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.message || "Server upload endpoint failed");
+            }
             
             const data = await res.json();
             return data.imageUrl; // e.g. /uploads/162384783.jpg
@@ -341,8 +308,11 @@
                     closeModal('addProductModal');
                     document.getElementById('addProductForm').reset();
                     fetchProducts();
-                } else alert("Failed to add product.");
-            } catch (err) { console.error(err); alert("Error saving product. Check file size."); }
+                } else {
+                    const error = await res.json();
+                    alert("Failed to add product: " + error.message);
+                }
+            } catch (err) { console.error(err); alert("Error saving product: " + err.message); }
             
             btn.disabled = false;
             btn.innerText = "Save Product";
@@ -403,7 +373,7 @@
                     const error = await res.json();
                     alert("Update failed: " + error.message);
                 }
-            } catch (err) { console.error(err); alert("Error updating product."); }
+            } catch (err) { console.error(err); alert("Error updating product: " + err.message); }
             
             btn.disabled = false;
             btn.innerText = "Update Product";

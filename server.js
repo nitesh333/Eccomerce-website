@@ -49,7 +49,10 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'public/uploads/'),
     filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
-const upload = multer({ storage });
+const upload = multer({ 
+    storage,
+    limits: { fileSize: 50 * 1024 * 1024 } // 50 MB limit
+});
 
 app.post('/api/upload', upload.single('image'), (req, res) => {
     if(!req.file) return res.status(400).json({message: 'No file uploaded'});
