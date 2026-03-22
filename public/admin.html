@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kaajtaanka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { background-color: #f9f9f9; }
+        .dashboard { display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background: #fff; padding: 2rem; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
+        .sidebar h2 { font-family: 'Noto Serif', serif; color: #b76e22; margin-bottom: 2rem; }
+        .sidebar a { display: block; padding: 1rem 0; color: #333; text-decoration: none; border-bottom: 1px solid #eee; }
+        .sidebar a:hover { color: #b76e22; }
+        .main-content { flex: 1; padding: 2rem; }
+        .card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { font-weight: 600; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2 style="cursor: pointer;" onclick="window.location.href='/'">Kaajtaanka</h2>
+            <a href="#" onclick="showSection('products')">Products</a>
+            <a href="#" onclick="showSection('orders')">Orders</a>
+            <a href="#" onclick="showSection('requests')">Custom Requests</a>
+            <a href="#" onclick="window.location.href='/'">← Back to Store</a>
+        </div>
+        <div class="main-content">
+            <header>
+                <h1>Admin Dashboard</h1>
+            </header>
+
+            <div id="products-section" class="card">
+                <h3>Manage Products</h3>
+                <button class="btn-primary" style="margin-top: 1rem;">+ Add Product</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table">
+                        <!-- Products will be loaded here via JS -->
+                        <tr><td colspan="6" style="text-align:center;">Loading products...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Additional sections (Orders, Requests) go here... hidden by default -->
+        </div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            // Logic to switch tabs and fetch data from the APIs
+            console.log("Navigating to", section);
+            if(section === 'products') fetchProducts();
+        }
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const tbody = document.getElementById('products-table');
+                
+                if(products.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = products.map(p => `
+                    <tr>
+                        <td>${p.id}</td>
+                        <td>${p.name}</td>
+                        <td>${p.category}</td>
+                        <td>$${p.price}</td>
+                        <td>${p.stock}</td>
+                        <td><button class="btn-primary" style="padding: 0.5rem; font-size: 0.8rem;">Edit</button></td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error("Failed to fetch products", err);
+            }
+        }
+
+        // Load initial data
+        fetchProducts();
+    </script>
+</body>
+</html>

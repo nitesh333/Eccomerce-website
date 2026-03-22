@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Curator | Artisanal Heritage Gallery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary-fixed": "#410006", "error-container": "#ffdad6", "primary-container": "#bc4848", "outline": "#8a7170", "on-surface": "#1a1c1c", "surface-tint": "#a63839", "on-primary-fixed-variant": "#862024", "background": "#f9f9f9", "error": "#ba1a1a", "surface-container": "#eeeeee", "on-secondary": "#ffffff", "surface-variant": "#e2e2e2", "surface-container-highest": "#e2e2e2", "outline-variant": "#dec0be", "inverse-primary": "#ffb3af", "on-secondary-container": "#636262", "tertiary-container": "#d42a2e", "surface-container-high": "#e8e8e8", "on-tertiary": "#ffffff", "secondary": "#5f5e5e", "on-secondary-fixed": "#1b1c1c", "primary-fixed-dim": "#ffb3af", "on-tertiary-fixed-variant": "#930011", "on-primary-container": "#fff0ee", "on-error-container": "#93000a", "surface-bright": "#f9f9f9", "secondary-fixed-dim": "#c8c6c5", "tertiary-fixed": "#ffdad6", "surface-container-lowest": "#ffffff", "surface-container-low": "#f4f3f3", "inverse-on-surface": "#f1f1f1", "surface": "#f9f9f9", "inverse-surface": "#2f3131", "tertiary": "#b00619", "primary-fixed": "#ffdad8", "secondary-container": "#e2dfde", "on-tertiary-fixed": "#410003", "on-surface-variant": "#574140", "surface-dim": "#dadada", "on-background": "#1a1c1c", "on-error": "#ffffff", "on-secondary-fixed-variant": "#474746", "on-primary": "#ffffff", "primary": "#9c3032", "on-tertiary-container": "#fff0ee", "tertiary-fixed-dim": "#ffb3ad", "secondary-fixed": "#e5e2e1" }, fontFamily: { "headline": ["Noto Serif", "serif"], "body": ["Plus Jakarta Sans", "sans-serif"], "label": ["Plus Jakarta Sans", "sans-serif"] }, borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"}, }, }, }
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9f9f9; color: #1a1c1c; min-height: max(884px, 100dvh); }
+.serif-italic { font-family: 'Noto Serif', serif; font-style: italic; }
+/* Admin Toggle Switch styling */
+.switch { position: relative; display: inline-block; width: 44px; height: 20px; vertical-align: middle; margin-left: 8px;}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #9c3032; }
+input:checked + .slider:before { transform: translateX(24px); }
+</style>
+</head>
+<body class="bg-surface text-on-surface">
+
+<!-- TopAppBar -->
+<header class="bg-[#f9f9f9] dark:bg-gray-950 docked full-width top-0 z-50 flex justify-between items-center px-8 py-6 max-w-full mx-auto fixed w-full">
+<div class="flex items-center gap-6">
+    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200">
+        <span class="material-symbols-outlined" data-icon="menu">menu</span>
+    </button>
+    <nav class="hidden md:flex gap-8 items-center">
+        <a class="font-noto-serif italic tracking-tight text-[#9c3032] dark:text-[#bc4848] border-b-2 border-[#9c3032] pb-1" href="#">Home</a>
+        <a class="font-noto-serif italic tracking-tight text-[#5f5e5e] dark:text-gray-400 hover:text-[#9c3032] transition-colors" href="#">Collections</a>
+        <a class="font-noto-serif italic tracking-tight text-[#5f5e5e] dark:text-gray-400 hover:text-[#9c3032] transition-colors" href="#">Our Story</a>
+        <div class="ml-4 font-body text-xs text-secondary flex items-center">
+            Admin Mode
+            <label class="switch">
+                <input type="checkbox" id="adminSwitch" onchange="toggleAdmin()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </nav>
+</div>
+<div class="text-3xl font-noto-serif font-bold text-[#9c3032] dark:text-[#bc4848] tracking-tighter">
+    The Curator
+</div>
+<div class="flex items-center gap-6">
+    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200">
+        <span class="material-symbols-outlined" data-icon="search">search</span>
+    </button>
+    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/#cart'">
+        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+    </button>
+</div>
+</header>
+
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative h-[795px] flex items-center overflow-hidden bg-surface-container-low">
+    <div class="container mx-auto px-8 grid grid-cols-1 md:grid-cols-12 items-center gap-12">
+        <div class="md:col-span-6 z-10 relative">
+            <h1 class="text-5xl md:text-7xl font-headline font-bold leading-tight tracking-tighter text-on-surface">
+                Heritage <span class="serif-italic">Reimagined.</span>
+            </h1>
+            <p class="mt-6 text-lg md:text-xl font-body text-secondary max-w-md">
+                Artisanal Crafts for the Modern Connoisseur. Discover a curated selection of timeless treasures.
+            </p>
+            <div class="mt-10 flex gap-4">
+                <button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:opacity-90 transition-opacity duration-200">
+                    Explore Collection
+                </button>
+                <button class="border border-outline-variant/20 text-on-surface px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:bg-surface-container transition-colors">
+                    Our Story
+                </button>
+            </div>
+        </div>
+        <div class="md:col-span-6 relative h-[530px] md:h-[707px]">
+            <div class="absolute inset-0 bg-surface-container-high rounded-sm overflow-hidden transform translate-x-8 translate-y-8 -z-10"></div>
+            <img alt="Antique jewelry and artisanal artifacts" class="w-full h-full object-cover rounded-sm shadow-2xl" data-alt="Collection of antique gold jewelry and silver items" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYpOrzMxioL2HsoJJVTrR3ll0MN0yM8a6sJdsHsgSv6ZmUchMrwKrG06CbZe8gBxHl_Z35ufRBQjGyWUBTizrL2k5vqKaODWisGAXiCFz_DCD_Z2H7sWiI2Z7nAfrGs0i8eic7LpvKno1wc_THrt-rSKNWjyD5wz2moDyd2K7Mqo5UehKn2-4NAAdgGgvln0jZA3qGPGWiY921aKV64Yw5BwVwkcnyPUvsoEdymfNHsi4k4FTlh-YCj7SBg2ZUDLxo1JoUFYIbwVQ"/>
+            <div class="absolute -bottom-8 -left-8 bg-surface-container-lowest p-6 shadow-xl hidden lg:block border-l-4 border-primary">
+                <p class="font-headline italic text-primary text-xl">The Gold Standard</p>
+                <p class="font-label text-xs uppercase tracking-widest text-secondary mt-1">Hand-etched Heritage</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories Grid -->
+<section class="py-24 bg-surface">
+<div class="container mx-auto px-8">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+    <div class="max-w-xl">
+        <h2 class="text-4xl font-headline font-bold text-on-surface">Curated <span class="serif-italic">Departments</span></h2>
+        <div class="h-1 w-24 bg-primary mt-4"></div>
+    </div>
+    <p class="font-body text-secondary max-w-xs text-sm">Every piece is hand-selected for its historical significance and exceptional craftsmanship.</p>
+</div>
+<!-- Static Categories here -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer">
+        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9EdYmGh34y9WsSiYMwvCUhKZCsHURUgJh6tt2D8AXOCmvckw6WlAIOb1qOv8e_uyzWgecLTDqsrvHtfdGOTP-b6I7rtcVAPKtHlbMLZ9W5q35kPF5rmTNKeKeypLFz8xULdLWf14ezMBM_YFOM_c7enb6hf_XXRxlDnMDmIFgvTomSqO39wCK-VD1aDD7MoJ7Uo5kfHsf4AFgozYPILWbDGTr9p8z7cN19R5CdkRXozInhoKaLQ3SxBQLxb8k7oZeExNVjqlz4AI"/>
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Heritage Pieces</span><h3 class="text-2xl font-headline text-white font-bold">Antique Jewelry</h3></div>
+    </div>
+    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer md:mt-12">
+        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK5_ZLdhLxxHVcBXwvQ-En-VUDp9H5wdFxRku4Wm7b3AAHDiSFiokFvSrc8Ch65ujcbZ2dWCTpC3ihakF-jdcpP_trESNXoWWj4R08_6M11iPUgJf0hIPt2pM9gmx3z54xTStgiiJZ2F0hkLT__LvIewIK4yISvG-D3QgW-zJ2QrGP7PbSDzW-CFMrOw22MtjQm9RIHEjKzaJ_gszE_bUken7lM-2RdigtRLKbG3CbuAfnFFGgf402Ng3KuWhitzlYqmdc_v6ZxPE"/>
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Artisanal Weaves</span><h3 class="text-2xl font-headline text-white font-bold">Handcrafted Apparel</h3></div>
+    </div>
+    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer">
+        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApvwqQnuL-x-zddxLr6IVZZUiQgvwJlCFTAa6hqANidk-Z2xtKcYqf1sNfdmEXjxZgkU922JTYXH1sR6L6DXDNd52CAxGbZAaeqvWYLkT9_Bc7uGPJb2Xg8O46HfdHPk8X49FcJxVIJVw5DAGh8NGWwq_mqfi77hZbywCNybO6Mn_AVmFndYkcvpOcWQgjsw3ma7KsIeyIAHbZmqM8g1svAqLS4nAc1sXRd2f0CWCRmjlZ5SMZajAR2pULMgoyoMdIEcO7sFmr_lw"/>
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Precision &amp; Scent</span><h3 class="text-2xl font-headline text-white font-bold">Timepieces &amp; Fragrance</h3></div>
+    </div>
+    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer md:mt-12">
+        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMr9x3g65_3PI4xDr4eVFu-9ORS7-Xr_2goJ5Zprw3hz3HDrRGEK3wdN2KWrBEqhhhR14QDraxPe9DpHjZwqOep691e7ommuDrMsrM2xSQS8apjmN25PegiAjP-fRam03kGJi1V9e-pTTWyrBmcefKlmEof5JltUpgx4KaIB56uJ3a0WYTKr0HG1xCMRhjhNl2rygO1YKv4Lo2nguksbE2gsXfKedhu3vY22BzV9SdP4x6JCqmhuQWyXAE46IRK31o9a2A_bHejCU"/>
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Natural Nectar</span><h3 class="text-2xl font-headline text-white font-bold">Heritage Honey</h3></div>
+    </div>
+</div>
+</div>
+</section>
+
+<!-- Bestsellers / New Arrivals Carousel (DYNAMIC API DATA) -->
+<section class="py-24 bg-surface-container-low">
+    <div class="container mx-auto px-8">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="text-3xl font-headline font-bold text-on-surface">The <span class="serif-italic">Season's Best</span></h2>
+            <div class="flex gap-4">
+                <button class="p-2 border border-outline-variant text-primary hover:bg-primary hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="p-2 border border-outline-variant text-primary hover:bg-primary hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </div>
+        <div id="dynamic-products-container" class="flex gap-8 overflow-x-auto pb-12 no-scrollbar">
+            <!-- Dynamic products loaded from API -->
+            <div class="py-12 w-full text-center text-secondary">
+                Loading live products from database...
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Brand Story Section -->
+<section class="py-32 bg-surface">
+    <!-- Static Brand Story Content -->
+    <div class="container mx-auto px-8 relative">
+        <div class="flex flex-col md:flex-row items-center gap-0">
+            <div class="w-full md:w-3/5 z-0">
+                <img class="w-full aspect-[16/9] object-cover grayscale-[20%] sepia-[10%] shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYzbaUuXaOIJw3yWEoJkmDGrH5cjKOYc-8LpEqevLMhP4q6YERC_en93o2thciBKNJ8cbjKqumgenbBVOqLIIjTlvKOh5p9aDJpN_BALPe4s9rOlp5cxJum17PYhKZgFrva8e72LReVYGG8Ofv0C6g92s4Sg6tWBQaCa7HBvFJ32vXwb-fWQk6wiOxsXW4GAk1paaNifiSqs5hqjTSHVVpYtlAyW7TZl0NUMSj-AacVyL5nToRhNDMttS-mP5WGuD0XkJrP6Jym-Q"/>
+            </div>
+            <div class="w-full md:w-2/5 bg-surface-container-lowest p-12 md:-ml-24 z-10 shadow-2xl border-t-8 border-primary">
+                <h2 class="text-4xl font-headline font-bold text-on-surface leading-tight">Crafted with <span class="serif-italic">Passion.</span> Preserving Heritage.</h2>
+                <p class="mt-8 font-body text-secondary leading-relaxed">At The Curator, we believe that true luxury lies in the stories behind the objects. We work directly with generational artisans who have mastered crafts nearly lost to time.</p>
+                <p class="mt-4 font-body text-secondary leading-relaxed">Every purchase supports traditional communities and ensures that the threads of our cultural heritage continue to be woven into the modern world.</p>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<script>
+    // JS Logic to redirect to admin
+    function toggleAdmin() {
+        const toggle = document.getElementById('adminSwitch');
+        if (toggle.checked) {
+            window.location.href = '/admin.html';
+        }
+    }
+
+    // JS Logic to fetch real products from our Express backend
+    async function loadDynamicProducts() {
+        try {
+            const response = await fetch('/api/products');
+            const data = await response.json();
+            const container = document.getElementById('dynamic-products-container');
+
+            if (data.length === 0) {
+                container.innerHTML = `<div class="p-8 text-secondary">No products available yet. Add some in the Admin panel!</div>`;
+                return;
+            }
+
+            container.innerHTML = data.map(product => `
+                <div class="min-w-[300px] bg-surface-container-lowest group relative shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="aspect-[4/5] overflow-hidden bg-surface-container-low relative">
+                        <!-- Use backend image if available or fallback -->
+                        <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button class="bg-surface-container-lowest text-on-surface px-6 py-2 uppercase text-xs tracking-widest font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform" onclick="alert('Added to cart!')">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-headline text-lg font-bold">${product.name}</h3>
+                        <p class="font-label text-sm text-secondary mt-1">${product.category}</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-primary font-bold">$${product.price}</span>
+                            <span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">favorite</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch(error) {
+            console.error("Error fetching products:", error);
+            document.getElementById('dynamic-products-container').innerHTML = `<div class="p-8 text-error">Failed to load live catalog data.</div>`;
+        }
+    }
+
+    // Load products on start
+    document.addEventListener('DOMContentLoaded', loadDynamicProducts);
+</script>
+</body>
+</html>

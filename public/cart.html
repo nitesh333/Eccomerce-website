@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shopping Cart | The Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9f9f9; color: #1a1c1c; min-height: 100vh;}
+.serif-italic { font-family: 'Noto Serif', serif; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header class="bg-[#f9f9f9] border-b p-6 flex justify-between items-center">
+    <a href="/" class="text-2xl font-serif font-bold text-[#9c3032]">The Curator</a>
+</header>
+
+<main class="container mx-auto px-8 py-16 max-w-4xl">
+    <h1 class="text-4xl font-serif font-bold mb-8">Shopping <span class="serif-italic">Bag</span></h1>
+    
+    <div id="cartItems" class="bg-white p-8 rounded shadow-sm border-t border-gray-200">
+        <!-- items -->
+    </div>
+
+    <div id="checkoutSection" class="mt-8 bg-[#f4f3f3] p-8 rounded flex flex-col items-end hidden">
+        <h3 class="text-2xl font-bold mb-4">Total: $<span id="cartTotal">0</span></h3>
+        <textarea id="address" class="w-full max-w-md p-4 mb-4 border-none focus:ring-1 focus:ring-[#9c3032]" placeholder="Shipping Address"></textarea>
+        <button onclick="checkout()" class="bg-[#9c3032] text-white py-4 px-12 uppercase tracking-[2px] font-bold text-sm hover:bg-[#b00619] transition-colors">Complete Checkout</button>
+    </div>
+</main>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderCart() {
+        const container = document.getElementById('cartItems');
+        if(cart.length === 0) {
+            container.innerHTML = "<p class='text-gray-500'>Your bag is empty.</p>";
+            document.getElementById('checkoutSection').classList.add('hidden');
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map(item => {
+            total += item.price * item.qty;
+            return `
+            <div class="flex justify-between items-center border-b py-4">
+                <div>
+                    <h4 class="font-bold text-lg">${item.name}</h4>
+                    <p class="text-sm text-gray-500">Qty: ${item.qty}</p>
+                </div>
+                <div class="font-bold text-[#9c3032]">$${item.price * item.qty}</div>
+            </div>`;
+        }).join('');
+
+        document.getElementById('cartTotal').innerText = total;
+        document.getElementById('checkoutSection').classList.remove('hidden');
+    }
+
+    async function checkout() {
+        const token = localStorage.getItem('token');
+        if(!token) {
+            alert("Please log in to checkout");
+            window.location.href = '/login.html';
+            return;
+        }
+
+        const address = document.getElementById('address').value;
+        if(!address) {
+            alert("Please provide a shipping address.");
+            return;
+        }
+
+        const totalAmount = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+        try {
+            const res = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ items: cart, totalAmount, shippingAddress: address })
+            });
+
+            if(res.ok) {
+                alert("Order placed successfully!");
+                localStorage.removeItem('cart');
+                window.location.href = '/profile.html';
+            } else {
+                const data = await res.json();
+                alert("Checkout failed: " + data.message);
+            }
+        } catch(err) {
+            alert("Checkout failed");
+        }
+    }
+
+    renderCart();
+</script>
+</body>
+</html>

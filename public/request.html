@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Custom Design Request | The Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9f9f9; color: #1a1c1c; min-height: 100vh; display: flex; align-items: center; justify-content: center;}
+.serif-italic { font-family: 'Noto Serif', serif; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="bg-white p-12 rounded shadow-2xl w-full max-w-2xl border-t-8 border-[#9c3032]">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-serif font-bold text-[#1a1c1c]">Custom <span class="serif-italic">Commission</span></h2>
+        <a href="/profile.html" class="text-sm text-gray-400 hover:text-[#9c3032] transition-colors">Cancel</a>
+    </div>
+    
+    <p class="text-sm text-gray-500 mb-8 leading-relaxed">Work directly with our generational artisans to craft a bespoke piece of jewelry. Describe your vision, materials of choice, and any thematic inspirations below.</p>
+
+    <form id="requestForm" class="space-y-6">
+        <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Design Description</label>
+            <textarea id="description" rows="5" class="w-full bg-[#f4f3f3] border-none px-4 py-3 focus:ring-1 focus:ring-[#9c3032]" placeholder="Describe the item, materials (e.g. 18k gold, raw emeralds), and dimensions." required></textarea>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Reference Image URL (Optional)</label>
+            <input type="url" id="designUrl" class="w-full bg-[#f4f3f3] border-none px-4 py-3 focus:ring-1 focus:ring-[#9c3032]" placeholder="Link to moodboard or sketch">
+        </div>
+        <button type="submit" class="w-full bg-[#9c3032] text-white py-4 uppercase tracking-[2px] font-bold text-sm hover:bg-[#b00619] transition-colors mt-6">Submit Commission Request</button>
+    </form>
+</div>
+
+<script>
+const token = localStorage.getItem('token');
+if(!token) {
+    alert("Please log in to submit a request.");
+    window.location.href = '/login.html';
+}
+
+document.getElementById('requestForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const description = document.getElementById('description').value;
+    const designUrl = document.getElementById('designUrl').value;
+
+    try {
+        const res = await fetch('/api/requests', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ description, designUrl })
+        });
+        const data = await res.json();
+        
+        if(res.ok) {
+            alert("Your commission request has been submitted successfully. An artisan will review it shortly.");
+            window.location.href = '/profile.html';
+        } else {
+            alert(data.message);
+        }
+    } catch (err) {
+        alert("Failed to submit request.");
+    }
+});
+</script>
+</body>
+</html>
