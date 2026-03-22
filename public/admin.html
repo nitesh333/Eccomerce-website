@@ -232,20 +232,44 @@
         function closeModal(id) { document.getElementById(id).style.display = "none"; }
         function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
 
-        // --- IMAGE UPLOAD HELPER ---
-        async function uploadFile(fileInput) {
-            const rawFile = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('image', rawFile);
+        // --- SECURE CLIENT-SIDE IMAGE COMPRESSION (BASE64) ---
+        // This bypasses server file uploading entirely, ensuring it works flawlessly on any hosting platform
+        // even if you upload a massive 50MB 4K image directly from your phone.
+        async function getBase64(fileInput) {
+            const file = fileInput.files[0];
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        // Squeeze massive images into 800px HD
+                        const MAX_SIZE = 800;
+                        if (width > height && width > MAX_SIZE) {
+                            height *= MAX_SIZE / width;
+                            width = MAX_SIZE;
+                        } else if (height > MAX_SIZE) {
+                            width *= MAX_SIZE / height;
+                            height = MAX_SIZE;
+                        }
 
-            const res = await fetch('/api/upload', { method: 'POST', body: formData });
-            if(!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.message || "Server upload endpoint failed");
-            }
-            
-            const data = await res.json();
-            return data.imageUrl; // e.g. /uploads/162384783.jpg
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Output as highly optimized Base64 string directly to DB!
+                        resolve(canvas.toDataURL('image/jpeg', 0.75));
+                    };
+                    img.onerror = reject;
+                };
+                reader.onerror = reject;
+            });
         }
 
         // --- FETCH PRODUCTS --
@@ -284,11 +308,11 @@
             btn.innerText = "Uploading...";
 
             try {
-                // 1. Upload the image file first
+                // 1. Instantly compress the image into a Base64 Text String on your device
                 const fileInput = document.getElementById('p_imageFile');
-                const uploadedImageUrl = await uploadFile(fileInput);
+                const uploadedImageUrl = await getBase64(fileInput);
 
-                // 2. Submit product details
+                // 2. Submit product details directly to the database without needing a file server
                 const newProduct = {
                     name: document.getElementById('p_name').value,
                     description: document.getElementById('p_desc').value,
@@ -342,12 +366,12 @@
             btn.innerText = "Updating...";
 
             try {
-                // If a new image is selected, upload it. Otherwise, keep current.
+                // If a new image is selected, compress it directly into Base64. Otherwise, keep current.
                 let finalImageUrl = document.getElementById('e_currentImage').value;
                 const fileInput = document.getElementById('e_imageFile');
                 
                 if(fileInput.files.length > 0) {
-                    finalImageUrl = await uploadFile(fileInput);
+                    finalImageUrl = await getBase64(fileInput);
                 }
 
                 const updatedProduct = {
