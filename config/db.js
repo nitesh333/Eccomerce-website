@@ -5,26 +5,25 @@ const path = require('path');
 // When deploying to HosterPK, you will uncomment the MySQL section below.
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: path.join(__dirname, '../database.sqlite'), // Stores data in backend/database.sqlite
-  logging: false, // Disable logging of all SQL queries to console
-});
+require('dotenv').config();
 
-/* 
-// MySQL Configuration for HosterPK Production
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-  host: process.env.DB_HOST || 'localhost',
-  dialect: 'mysql',
-  logging: false,
-});
-*/
+const sequelize = new Sequelize(
+    process.env.DB_NAME || 'akiyans_rakiyansh_db',
+    process.env.DB_USER || 'rakiyans_nitesh33',
+    process.env.DB_PASS || 'nitesh2026@',
+    {
+        host: process.env.DB_HOST || 'localhost',
+        dialect: 'mysql',
+        logging: false, // Set to true to see SQL queries in the console
+    }
+);
 
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('Database connected successfully (SQLite).');
+        console.log('Successfully connected to the MySQL production database.');
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
-        process.exit(1);
+        console.error('Unable to connect to the MySQL database:', error);
     }
 };
 

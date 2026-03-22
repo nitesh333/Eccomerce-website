@@ -232,6 +232,9 @@
         function closeModal(id) { document.getElementById(id).style.display = "none"; }
         function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
 
+        // Secure absolute routing for cPanel subdomains
+        const API_BASE = window.location.hostname.includes('localhost') ? '' : 'https://rakiyansh.com';
+
         // --- SECURE CLIENT-SIDE IMAGE COMPRESSION (BASE64) ---
         // This bypasses server file uploading entirely, ensuring it works flawlessly on any hosting platform
         // even if you upload a massive 50MB 4K image directly from your phone.
@@ -275,7 +278,7 @@
         // --- FETCH PRODUCTS --
         async function fetchProducts() {
             try {
-                const res = await fetch('/api/products');
+                const res = await fetch(API_BASE + '/api/products');
                 existingProducts = await res.json();
                 const tbody = document.getElementById('products-table');
                 
@@ -322,7 +325,7 @@
                     imageUrl: uploadedImageUrl
                 };
 
-                const res = await fetch('/api/products', {
+                const res = await fetch(API_BASE + '/api/products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(newProduct)
@@ -383,7 +386,7 @@
                     imageUrl: finalImageUrl
                 };
 
-                const res = await fetch(`/api/products/${id}`, {
+                const res = await fetch(API_BASE + `/api/products/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(updatedProduct)
@@ -406,7 +409,7 @@
         // --- DELETE PRODUCT ---
         async function deleteProduct(id) {
             if(confirm("Are you sure you want to delete this product forever?")) {
-                const res = await fetch(`/api/products/${id}`, {
+                const res = await fetch(API_BASE + `/api/products/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -418,7 +421,7 @@
         async function fetchOrders() {
             const tbody = document.getElementById('orders-table');
             try {
-                const res = await fetch('/api/orders', { headers: { 'Authorization': `Bearer ${token}` } });
+                const res = await fetch(API_BASE + '/api/orders', { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
                 if(!res.ok || data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No orders found.</td></tr>'; return; }
                 tbody.innerHTML = data.map(o => `
@@ -441,7 +444,7 @@
         }
 
         async function updateOrderStatus(id, status) {
-            const res = await fetch(`/api/orders/${id}/status`, {
+            const res = await fetch(API_BASE + `/api/orders/${id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ status })
@@ -453,7 +456,7 @@
         async function fetchRequests() {
             const tbody = document.getElementById('requests-table');
             try {
-                const res = await fetch('/api/requests', { headers: { 'Authorization': `Bearer ${token}` } });
+                const res = await fetch(API_BASE + '/api/requests', { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
                 if(!res.ok || data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No requests found.</td></tr>'; return; }
                 tbody.innerHTML = data.map(r => `
@@ -476,7 +479,7 @@
         }
 
         async function updateRequestStatus(id, status) {
-            const res = await fetch(`/api/requests/${id}/status`, {
+            const res = await fetch(API_BASE + `/api/requests/${id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ status })
