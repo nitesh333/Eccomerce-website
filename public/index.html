@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>The Curator | Artisanal Heritage Gallery</title>
+<title>Rakiyansh | Artisanal E-Commerce</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -14,220 +14,264 @@ tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary-
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9f9f9; color: #1a1c1c; min-height: max(884px, 100dvh); }
 .serif-italic { font-family: 'Noto Serif', serif; font-style: italic; }
-/* Admin Toggle Switch styling */
-.switch { position: relative; display: inline-block; width: 44px; height: 20px; vertical-align: middle; margin-left: 8px;}
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: #9c3032; }
-input:checked + .slider:before { transform: translateX(24px); }
+/* Smooth CSS animations for eye-catchy UI */
+.fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Currency Toggle switch */
+.currency-switch { border: 1px solid #9c3032; border-radius: 20px; display: inline-flex; overflow: hidden; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
+.currency-btn { padding: 4px 12px; transition: 0.3s; color: #9c3032; }
+.currency-btn.active { background-color: #9c3032; color: #fff; }
 </style>
 </head>
 <body class="bg-surface text-on-surface">
 
-<!-- TopAppBar -->
-<header class="bg-[#f9f9f9] dark:bg-gray-950 docked full-width top-0 z-50 flex justify-between items-center px-8 py-6 max-w-full mx-auto fixed w-full">
+<header class="bg-[#f9f9f9]/90 backdrop-blur-md dark:bg-gray-950/90 docked full-width top-0 z-50 flex justify-between items-center px-8 py-6 max-w-full mx-auto fixed w-full shadow-sm hover:shadow-md transition-shadow">
 <div class="flex items-center gap-6">
     <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200">
         <span class="material-symbols-outlined" data-icon="menu">menu</span>
     </button>
     <nav class="hidden md:flex gap-8 items-center">
-        <a class="font-noto-serif italic tracking-tight text-[#9c3032] dark:text-[#bc4848] border-b-2 border-[#9c3032] pb-1" href="#">Home</a>
-        <a class="font-noto-serif italic tracking-tight text-[#5f5e5e] dark:text-gray-400 hover:text-[#9c3032] transition-colors" href="#">Collections</a>
-        <a class="font-noto-serif italic tracking-tight text-[#5f5e5e] dark:text-gray-400 hover:text-[#9c3032] transition-colors" href="#">Our Story</a>
-        <div class="ml-4 font-body text-xs text-secondary flex items-center">
-            Admin Mode
-            <label class="switch">
-                <input type="checkbox" id="adminSwitch" onchange="toggleAdmin()">
-                <span class="slider"></span>
-            </label>
-        </div>
+        <a class="font-noto-serif italic tracking-tight text-[#9c3032] dark:text-[#bc4848] border-b-2 border-[#9c3032] pb-1" href="/">Home</a>
+        <a class="font-noto-serif italic tracking-tight text-[#5f5e5e] hover:text-[#9c3032] transition-colors" href="#catalog">Shop Rakiyansh</a>
+        <a class="font-noto-serif italic tracking-tight text-[#5f5e5e] hover:text-[#9c3032] transition-colors" href="/about.html">Our Story</a>
     </nav>
 </div>
-<div class="text-3xl font-noto-serif font-bold text-[#9c3032] dark:text-[#bc4848] tracking-tighter">
-    The Curator
+<div class="text-4xl font-noto-serif font-bold text-[#9c3032] dark:text-[#bc4848] tracking-widest uppercase" style="letter-spacing: 0.2em;">
+    Rakiyansh
 </div>
 <div class="flex items-center gap-6">
+    <!-- Currency Toggle -->
+    <div class="currency-switch" onclick="toggleCurrency()">
+        <span id="curr-usd" class="currency-btn active">USD</span>
+        <span id="curr-pkr" class="currency-btn">PKR</span>
+    </div>
+
     <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/profile.html'">
         <span class="material-symbols-outlined" data-icon="person">person</span>
     </button>
-    <button class="text-[#9c3032] dark:text-[#bc4848] hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/cart.html'">
+    <button class="text-[#9c3032] relative hover:opacity-80 transition-opacity duration-200" onclick="window.location.href='/cart.html'">
         <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+        <!-- Optional Cart Badge -->
+        <span id="cartBadge" class="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
     </button>
 </div>
 </header>
 
-<main class="pt-24">
-<!-- Hero Section -->
+<main class="pt-24 fade-in">
 <section class="relative h-[795px] flex items-center overflow-hidden bg-surface-container-low">
     <div class="container mx-auto px-8 grid grid-cols-1 md:grid-cols-12 items-center gap-12">
         <div class="md:col-span-6 z-10 relative">
             <h1 class="text-5xl md:text-7xl font-headline font-bold leading-tight tracking-tighter text-on-surface">
-                Heritage <span class="serif-italic">Reimagined.</span>
+                Rakiyansh <span class="serif-italic">Elegance.</span>
             </h1>
             <p class="mt-6 text-lg md:text-xl font-body text-secondary max-w-md">
-                Artisanal Crafts for the Modern Connoisseur. Discover a curated selection of timeless treasures.
+                Artisanal fashion, luxury timepieces, and natural heritage brought directly to your doorstep.
             </p>
             <div class="mt-10 flex gap-4">
-                <button onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:opacity-90 transition-opacity duration-200">
-                    Explore Collection
+                <button onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})" class="shadow-lg hover:shadow-xl bg-gradient-to-r from-[#9c3032] to-[#b00619] text-white px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm transform hover:-translate-y-1 transition-all duration-300">
+                    Explore Rakiyansh
                 </button>
-                <button onclick="window.location.href='/request.html'" class="border border-outline-variant/20 text-on-surface px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:bg-surface-container transition-colors">
+                <button onclick="window.location.href='/request.html'" class="border-2 border-[#9c3032] text-[#9c3032] px-8 py-4 rounded-md uppercase tracking-[1px] font-bold text-sm hover:bg-[#9c3032] hover:text-white transition-colors">
                     Custom Crafts
                 </button>
             </div>
         </div>
         <div class="md:col-span-6 relative h-[530px] md:h-[707px]">
-            <div class="absolute inset-0 bg-surface-container-high rounded-sm overflow-hidden transform translate-x-8 translate-y-8 -z-10"></div>
-            <img alt="Antique jewelry and artisanal artifacts" class="w-full h-full object-cover rounded-sm shadow-2xl" data-alt="Collection of antique gold jewelry and silver items" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYpOrzMxioL2HsoJJVTrR3ll0MN0yM8a6sJdsHsgSv6ZmUchMrwKrG06CbZe8gBxHl_Z35ufRBQjGyWUBTizrL2k5vqKaODWisGAXiCFz_DCD_Z2H7sWiI2Z7nAfrGs0i8eic7LpvKno1wc_THrt-rSKNWjyD5wz2moDyd2K7Mqo5UehKn2-4NAAdgGgvln0jZA3qGPGWiY921aKV64Yw5BwVwkcnyPUvsoEdymfNHsi4k4FTlh-YCj7SBg2ZUDLxo1JoUFYIbwVQ"/>
-            <div class="absolute -bottom-8 -left-8 bg-surface-container-lowest p-6 shadow-xl hidden lg:block border-l-4 border-primary">
-                <p class="font-headline italic text-primary text-xl">The Gold Standard</p>
-                <p class="font-label text-xs uppercase tracking-widest text-secondary mt-1">Hand-etched Heritage</p>
-            </div>
+            <img class="w-full h-full object-cover rounded-sm shadow-2xl transition-transform duration-1000 hover:scale-[1.02]" src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?auto=format&fit=crop&q=80"/>
         </div>
     </div>
 </section>
 
-<!-- Featured Categories Grid -->
-<section class="py-24 bg-surface">
-<div class="container mx-auto px-8">
-<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-    <div class="max-w-xl">
-        <h2 class="text-4xl font-headline font-bold text-on-surface">Curated <span class="serif-italic">Departments</span></h2>
-        <div class="h-1 w-24 bg-primary mt-4"></div>
+<!-- Filter & Search Section -->
+<section id="catalog" class="py-12 bg-white border-b">
+    <div class="container mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="relative w-full md:w-1/3">
+            <span class="material-symbols-outlined absolute left-4 top-3 text-gray-400">search</span>
+            <input type="text" id="searchInput" placeholder="Search Rakiyansh collection..." class="w-full bg-[#f4f3f3] border-none pl-12 pr-4 py-3 rounded focus:ring-2 focus:ring-[#9c3032] outline-none transition-all">
+        </div>
+        
+        <div class="flex items-center gap-4 w-full md:w-1/3">
+            <label class="text-sm font-bold text-gray-500 uppercase">Max Price: <span id="priceLabel" class="text-[#9c3032]"></span></label>
+            <input type="range" id="priceSlider" min="0" max="5000" step="50" value="5000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#9c3032]">
+        </div>
+
+        <div class="w-full md:w-1/3">
+            <select id="categorySelect" class="w-full bg-[#f4f3f3] border-none px-4 py-3 rounded focus:ring-2 focus:ring-[#9c3032] outline-none font-bold text-gray-600">
+                <option value="All">All Categories</option>
+                <option value="Jewelry">Jewelry</option>
+                <option value="Watches">Watches</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Perfumes">Perfumes</option>
+                <option value="Honey">Honey</option>
+            </select>
+        </div>
     </div>
-    <p class="font-body text-secondary max-w-xs text-sm">Every piece is hand-selected for its historical significance and exceptional craftsmanship.</p>
-</div>
-<!-- Static Categories here -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-    <div onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})" class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer">
-        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9EdYmGh34y9WsSiYMwvCUhKZCsHURUgJh6tt2D8AXOCmvckw6WlAIOb1qOv8e_uyzWgecLTDqsrvHtfdGOTP-b6I7rtcVAPKtHlbMLZ9W5q35kPF5rmTNKeKeypLFz8xULdLWf14ezMBM_YFOM_c7enb6hf_XXRxlDnMDmIFgvTomSqO39wCK-VD1aDD7MoJ7Uo5kfHsf4AFgozYPILWbDGTr9p8z7cN19R5CdkRXozInhoKaLQ3SxBQLxb8k7oZeExNVjqlz4AI"/>
-        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Heritage Pieces</span><h3 class="text-2xl font-headline text-white font-bold">Antique Jewelry</h3></div>
-    </div>
-    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer md:mt-12">
-        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK5_ZLdhLxxHVcBXwvQ-En-VUDp9H5wdFxRku4Wm7b3AAHDiSFiokFvSrc8Ch65ujcbZ2dWCTpC3ihakF-jdcpP_trESNXoWWj4R08_6M11iPUgJf0hIPt2pM9gmx3z54xTStgiiJZ2F0hkLT__LvIewIK4yISvG-D3QgW-zJ2QrGP7PbSDzW-CFMrOw22MtjQm9RIHEjKzaJ_gszE_bUken7lM-2RdigtRLKbG3CbuAfnFFGgf402Ng3KuWhitzlYqmdc_v6ZxPE"/>
-        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Artisanal Weaves</span><h3 class="text-2xl font-headline text-white font-bold">Handcrafted Apparel</h3></div>
-    </div>
-    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer">
-        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApvwqQnuL-x-zddxLr6IVZZUiQgvwJlCFTAa6hqANidk-Z2xtKcYqf1sNfdmEXjxZgkU922JTYXH1sR6L6DXDNd52CAxGbZAaeqvWYLkT9_Bc7uGPJb2Xg8O46HfdHPk8X49FcJxVIJVw5DAGh8NGWwq_mqfi77hZbywCNybO6Mn_AVmFndYkcvpOcWQgjsw3ma7KsIeyIAHbZmqM8g1svAqLS4nAc1sXRd2f0CWCRmjlZ5SMZajAR2pULMgoyoMdIEcO7sFmr_lw"/>
-        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Precision &amp; Scent</span><h3 class="text-2xl font-headline text-white font-bold">Timepieces &amp; Fragrance</h3></div>
-    </div>
-    <div class="group relative overflow-hidden aspect-[4/5] bg-surface-container-low cursor-pointer md:mt-12">
-        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMr9x3g65_3PI4xDr4eVFu-9ORS7-Xr_2goJ5Zprw3hz3HDrRGEK3wdN2KWrBEqhhhR14QDraxPe9DpHjZwqOep691e7ommuDrMsrM2xSQS8apjmN25PegiAjP-fRam03kGJi1V9e-pTTWyrBmcefKlmEof5JltUpgx4KaIB56uJ3a0WYTKr0HG1xCMRhjhNl2rygO1YKv4Lo2nguksbE2gsXfKedhu3vY22BzV9SdP4x6JCqmhuQWyXAE46IRK31o9a2A_bHejCU"/>
-        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-        <div class="absolute bottom-0 left-0 p-8 w-full"><span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/80 block mb-2">Natural Nectar</span><h3 class="text-2xl font-headline text-white font-bold">Heritage Honey</h3></div>
-    </div>
-</div>
-</div>
 </section>
 
-<!-- Bestsellers / New Arrivals Carousel (DYNAMIC API DATA) -->
-<section id="catalog" class="py-24 bg-surface-container-low">
+<!-- Product Catalog -->
+<section class="py-16 bg-surface-container-low min-h-[400px]">
     <div class="container mx-auto px-8">
-        <div class="flex justify-between items-center mb-12">
-            <h2 class="text-3xl font-headline font-bold text-on-surface">The <span class="serif-italic">Season's Best</span></h2>
-            <div class="flex gap-4">
-                <button class="p-2 border border-outline-variant text-primary hover:bg-primary hover:text-white transition-colors">
-                    <span class="material-symbols-outlined">chevron_left</span>
-                </button>
-                <button class="p-2 border border-outline-variant text-primary hover:bg-primary hover:text-white transition-colors">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </button>
-            </div>
-        </div>
-        <div id="dynamic-products-container" class="flex gap-8 overflow-x-auto pb-12 no-scrollbar">
-            <!-- Dynamic products loaded from API -->
-            <div class="py-12 w-full text-center text-secondary">
-                Loading live products from database...
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Brand Story Section -->
-<section class="py-32 bg-surface">
-    <!-- Static Brand Story Content -->
-    <div class="container mx-auto px-8 relative">
-        <div class="flex flex-col md:flex-row items-center gap-0">
-            <div class="w-full md:w-3/5 z-0">
-                <img class="w-full aspect-[16/9] object-cover grayscale-[20%] sepia-[10%] shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYzbaUuXaOIJw3yWEoJkmDGrH5cjKOYc-8LpEqevLMhP4q6YERC_en93o2thciBKNJ8cbjKqumgenbBVOqLIIjTlvKOh5p9aDJpN_BALPe4s9rOlp5cxJum17PYhKZgFrva8e72LReVYGG8Ofv0C6g92s4Sg6tWBQaCa7HBvFJ32vXwb-fWQk6wiOxsXW4GAk1paaNifiSqs5hqjTSHVVpYtlAyW7TZl0NUMSj-AacVyL5nToRhNDMttS-mP5WGuD0XkJrP6Jym-Q"/>
-            </div>
-            <div class="w-full md:w-2/5 bg-surface-container-lowest p-12 md:-ml-24 z-10 shadow-2xl border-t-8 border-primary">
-                <h2 class="text-4xl font-headline font-bold text-on-surface leading-tight">Crafted with <span class="serif-italic">Passion.</span> Preserving Heritage.</h2>
-                <p class="mt-8 font-body text-secondary leading-relaxed">At The Curator, we believe that true luxury lies in the stories behind the objects. We work directly with generational artisans who have mastered crafts nearly lost to time.</p>
-                <p class="mt-4 font-body text-secondary leading-relaxed">Every purchase supports traditional communities and ensures that the threads of our cultural heritage continue to be woven into the modern world.</p>
-            </div>
+        <div id="dynamic-products-container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div class="py-12 w-full text-center text-secondary col-span-full">Loading Rakiyansh live catalog...</div>
         </div>
     </div>
 </section>
 </main>
 
+<!-- Universal Footer -->
+<footer class="bg-[#1a1c1c] text-white py-16">
+    <div class="container mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div>
+            <h3 class="font-serif text-2xl font-bold mb-6 tracking-widest text-[#9c3032]">RAKIYANSH</h3>
+            <p class="text-gray-400 text-sm leading-relaxed whitespace-pre-line">Artisanal heritage, premium timepieces, and natural wonders curated just for you. Delivering luxury globally.</p>
+        </div>
+        <div>
+            <h4 class="font-bold uppercase tracking-widest text-xs mb-6 text-gray-500">Shop</h4>
+            <ul class="space-y-4 text-sm text-gray-300">
+                <li><a href="#catalog" class="hover:text-white transition-colors">All Products</a></li>
+                <li><a href="/login.html" class="hover:text-white transition-colors">My Account</a></li>
+                <li><a href="/cart.html" class="hover:text-white transition-colors">Checkout</a></li>
+                <li><a href="/request.html" class="hover:text-white transition-colors">Custom Orders</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-bold uppercase tracking-widest text-xs mb-6 text-gray-500">Legal & Privacy</h4>
+            <ul class="space-y-4 text-sm text-gray-300">
+                <li><a href="/privacy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="/terms.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="/about.html" class="hover:text-white transition-colors">About Rakiyansh</a></li>
+                <li><a href="/contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-bold uppercase tracking-widest text-xs mb-6 text-gray-500">Newsletter</h4>
+            <p class="text-sm text-gray-400 mb-4">Join our inner circle for updates.</p>
+            <div class="flex">
+                <input type="email" placeholder="Your email" class="bg-gray-800 border-none text-white px-4 py-2 w-full text-sm outline-none">
+                <button class="bg-[#9c3032] px-4 font-bold text-sm hover:bg-[#b00619]">Join</button>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto px-8 mt-16 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
+        &copy; 2026 Rakiyansh E-Commerce. All rights reserved.
+    </div>
+</footer>
+
 <script>
-    // JS Logic to redirect to admin
-    function toggleAdmin() {
-        const toggle = document.getElementById('adminSwitch');
-        if (toggle.checked) {
-            window.location.href = '/admin.html';
-        }
+    const EXCHANGE_RATE = 280; // 1 USD = 280 PKR
+    let allProducts = [];
+    let currentCurrency = localStorage.getItem('currency') || 'USD';
+
+    // Apply active class to toggle
+    function updateCurrencyUI() {
+        document.getElementById('curr-usd').classList.toggle('active', currentCurrency === 'USD');
+        document.getElementById('curr-pkr').classList.toggle('active', currentCurrency === 'PKR');
+        document.getElementById('priceLabel').innerText = formatPrice(document.getElementById('priceSlider').value);
+        renderProducts(allProducts);
     }
 
-    // JS Logic to fetch real products from our Express backend
+    function toggleCurrency() {
+        currentCurrency = currentCurrency === 'USD' ? 'PKR' : 'USD';
+        localStorage.setItem('currency', currentCurrency);
+        updateCurrencyUI();
+    }
+
+    function formatPrice(usdPrice) {
+        if(currentCurrency === 'PKR') {
+            return "Rs " + (usdPrice * EXCHANGE_RATE).toLocaleString();
+        }
+        return "$" + Number(usdPrice).toLocaleString();
+    }
+
+    // Fetch products
     async function loadDynamicProducts() {
         try {
             const response = await fetch('/api/products');
-            const data = await response.json();
-            const container = document.getElementById('dynamic-products-container');
-
-            if (data.length === 0) {
-                container.innerHTML = `<div class="p-8 text-secondary">No products available yet. Add some in the Admin panel!</div>`;
-                return;
-            }
-
-            container.innerHTML = data.map(product => `
-                <div class="min-w-[300px] bg-surface-container-lowest group relative shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div class="aspect-[4/5] overflow-hidden bg-surface-container-low relative">
-                        <!-- Use backend image if available or fallback -->
-                        <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
-                            <button class="bg-surface-container-lowest text-on-surface px-6 py-2 uppercase text-xs tracking-widest font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform" onclick="window.location.href='/product.html?id=${product.id}'">View Details</button>
-                            <button class="bg-primary text-white border-none px-6 py-2 uppercase text-xs tracking-widest font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform" onclick="addToCartFn(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-headline text-lg font-bold">${product.name}</h3>
-                        <p class="font-label text-sm text-secondary mt-1">${product.category}</p>
-                        <div class="mt-4 flex justify-between items-center">
-                            <span class="text-primary font-bold">$${product.price}</span>
-                            <span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">favorite</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
+            allProducts = await response.json();
+            renderProducts(allProducts);
         } catch(error) {
-            console.error("Error fetching products:", error);
-            document.getElementById('dynamic-products-container').innerHTML = `<div class="p-8 text-error">Failed to load live catalog data.</div>`;
+            document.getElementById('dynamic-products-container').innerHTML = `<div class="col-span-full py-12 text-error text-center">Failed to load Rakiyansh live catalog array.</div>`;
         }
     }
 
-    // Real Cart Add Logic for Index Page
+    function renderProducts(productsList) {
+        const container = document.getElementById('dynamic-products-container');
+        
+        // Filter based on UI state
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const maxPrice = parseFloat(document.getElementById('priceSlider').value);
+        const category = document.getElementById('categorySelect').value;
+
+        const filtered = productsList.filter(p => {
+            const matchSearch = p.name.toLowerCase().includes(searchTerm) || p.description.toLowerCase().includes(searchTerm);
+            const matchPrice = p.price <= maxPrice;
+            const matchCat = category === 'All' || p.category === category;
+            return matchSearch && matchPrice && matchCat;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="col-span-full py-12 text-secondary text-center">No products match your criteria.</div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map(product => `
+            <div class="bg-white group relative shadow-sm hover:shadow-2xl transition-all duration-300 rounded overflow-hidden flex flex-col">
+                <div class="aspect-square overflow-hidden bg-surface-container-low relative cursor-pointer" onclick="window.location.href='/product.html?id=${product.id}'">
+                    <img src="${product.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <!-- Hover overlay -->
+                    <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
+                    </div>
+                </div>
+                <div class="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                        <p class="font-label text-xs uppercase tracking-widest text-gray-400 mb-1">${product.category}</p>
+                        <h3 class="font-headline text-lg font-bold text-[#1a1c1c]">${product.name}</h3>
+                    </div>
+                    <div class="mt-4 flex justify-between items-center border-t pt-4">
+                        <span class="text-[#9c3032] font-bold text-xl">${formatPrice(product.price)}</span>
+                        <button class="bg-[#f4f3f3] hover:bg-[#9c3032] hover:text-white p-2 rounded-full transition-colors flex items-center justify-center" onclick="addToCartFn(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}); event.stopPropagation();">
+                            <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
     function addToCartFn(id, name, price) {
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const existing = cart.find(i => i.id === id);
-        if(existing) {
-            existing.qty += 1;
-        } else {
-            cart.push({ id, name, price, qty: 1 });
-        }
+        if(existing) existing.qty += 1;
+        else cart.push({ id, name, price, qty: 1 });
         localStorage.setItem('cart', JSON.stringify(cart));
-        alert('Added ' + name + ' to your bag!');
+        
+        // Update badge
+        const badge = document.getElementById('cartBadge');
+        badge.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+        badge.classList.remove('hidden');
     }
 
-    // Load products on start
-    document.addEventListener('DOMContentLoaded', loadDynamicProducts);
+    // Attach Event Listeners to Filters
+    document.getElementById('searchInput').addEventListener('input', () => renderProducts(allProducts));
+    document.getElementById('categorySelect').addEventListener('change', () => renderProducts(allProducts));
+    document.getElementById('priceSlider').addEventListener('input', (e) => {
+        document.getElementById('priceLabel').innerText = formatPrice(e.target.value);
+        renderProducts(allProducts);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCurrencyUI();
+        loadDynamicProducts();
+        
+        // Show cart badge if items exist
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+        if(totalQty > 0) {
+            const badge = document.getElementById('cartBadge');
+            badge.innerText = totalQty;
+            badge.classList.remove('hidden');
+        }
+    });
 </script>
 </body>
 </html>

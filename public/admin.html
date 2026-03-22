@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Kaajtaanka</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Admin Dashboard - Rakiyansh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        body { background-color: #f9f9f9; }
+        body { background-color: #f9f9f9; font-family: 'Plus Jakarta Sans', sans-serif;}
         .dashboard { display: flex; min-height: 100vh; }
         .sidebar { width: 250px; background: #fff; padding: 2rem; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
-        .sidebar h2 { font-family: 'Noto Serif', serif; color: #9c3032; margin-bottom: 2rem; cursor: pointer; }
+        .sidebar h2 { font-family: 'Noto Serif', serif; color: #9c3032; margin-bottom: 2rem; cursor: pointer; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;}
         .sidebar button { display: block; width: 100%; text-align: left; background: none; border: none; padding: 1rem 0; color: #333; font-weight: 600; font-size: 1rem; cursor: pointer; border-bottom: 1px solid #eee; }
         .sidebar button:hover { color: #9c3032; }
         .main-content { flex: 1; padding: 2rem; }
@@ -21,32 +21,35 @@
         th { font-weight: 600; color: #666; }
         
         /* Modal Styles */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 30px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close:hover { color: black; }
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; font-size: 0.85rem; text-transform: uppercase; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; font-size: 0.85rem; text-transform: uppercase; color: #555;}
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-primary { background: #9c3032; color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .btn-primary:hover { background: #b00619; }
+        .btn-secondary { background: #eee; color: #333; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin-right: 1rem; }
     </style>
 </head>
 <body>
 
     <div class="dashboard">
         <div class="sidebar">
-            <h2 onclick="window.location.href='/'">The Curator</h2>
+            <h2 onclick="window.location.href='/'">Rakiyansh</h2>
             <button onclick="showSection('products-section')">Manage Products</button>
             <button onclick="showSection('orders-section')">View Orders</button>
             <button onclick="showSection('requests-section')">Custom Requests</button>
             <br><hr><br>
-            <button onclick="logout()">Logout</button>
+            <button onclick="logout()" style="color: #9c3032;">Logout</button>
             <button onclick="window.location.href='/'">← Back to Store</button>
         </div>
 
         <div class="main-content">
             <header style="margin-bottom: 2rem;">
-                <h1>Admin Dashboard</h1>
-                <p style="color: #666; font-size: 0.9rem;">Manage your store inventory, orders, and design requests.</p>
+                <h1 style="font-family: 'Noto Serif', serif; font-size: 2.5rem; color: #1a1c1c;">Admin Dashboard</h1>
+                <p style="color: #666; font-size: 0.9rem;">Manage your Rakiyansh store inventory, direct image uploads, orders, and design requests.</p>
             </header>
 
             <!-- PRODUCTS SECTION -->
@@ -79,8 +82,8 @@
                     <thead>
                         <tr>
                             <th>Order ID</th>
-                            <th>User ID</th>
                             <th>Total Amount</th>
+                            <th>Address</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -116,7 +119,7 @@
     <div id="addProductModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('addProductModal')">&times;</span>
-            <h2 style="font-family: 'Noto Serif', serif; margin-bottom: 1.5rem; color: #9c3032;">Upload New Product</h2>
+            <h2 style="font-family: 'Noto Serif', serif; margin-bottom: 1.5rem; color: #1a1c1c;">Upload New Product</h2>
             <form id="addProductForm">
                 <div class="form-group">
                     <label>Product Name</label>
@@ -128,7 +131,7 @@
                 </div>
                 <div class="form-group" style="display: flex; gap: 1rem;">
                     <div style="flex:1;">
-                        <label>Price ($)</label>
+                        <label>Base Price (USD)</label>
                         <input type="number" id="p_price" step="0.01" required>
                     </div>
                     <div style="flex:1;">
@@ -148,11 +151,62 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+                <!-- FILE UPLOAD INPUT -->
                 <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="url" id="p_img" placeholder="https://..." required>
+                    <label>Product Image (Direct Upload)</label>
+                    <input type="file" id="p_imageFile" accept="image/*" required>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Save Product</button>
+                <button type="submit" id="addSubmitBtn" class="btn-primary" style="width: 100%; margin-top: 1rem;">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EDIT PRODUCT MODAL -->
+    <div id="editProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editProductModal')">&times;</span>
+            <h2 style="font-family: 'Noto Serif', serif; margin-bottom: 1.5rem; color: #1a1c1c;">Edit Product</h2>
+            <form id="editProductForm">
+                <input type="hidden" id="e_id">
+                <input type="hidden" id="e_currentImage">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="e_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="e_desc" rows="3" required></textarea>
+                </div>
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <div style="flex:1;">
+                        <label>Base Price (USD)</label>
+                        <input type="number" id="e_price" step="0.01" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label>Stock Quantity</label>
+                        <input type="number" id="e_stock" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="e_cat" required>
+                        <option value="Jewelry">Jewelry</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Watches">Watches</option>
+                        <option value="Perfumes">Perfumes</option>
+                        <option value="Honey">Honey</option>
+                        <option value="Custom">Custom</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Update Image (Optional - leave blank to keep current)</label>
+                    <input type="file" id="e_imageFile" accept="image/*">
+                </div>
+                <div style="display:flex; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('editProductModal')">Cancel</button>
+                    <button type="submit" id="editSubmitBtn" class="btn-primary">Update Product</button>
+                </div>
             </form>
         </div>
     </div>
@@ -160,9 +214,11 @@
     <script>
         const token = localStorage.getItem('token');
         if (!token) {
-            alert("No token found. Please log in as admin.");
+            alert("Please log in as admin.");
             window.location.href = '/login.html';
         }
+
+        let existingProducts = [];
 
         function showSection(id) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
@@ -176,99 +232,181 @@
         function closeModal(id) { document.getElementById(id).style.display = "none"; }
         function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
 
-        // Fetch Products
+        // --- IMAGE UPLOAD HELPER ---
+        async function uploadFile(fileInput) {
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData // No Content-Type header needed for FormData inside fetch
+            });
+            if(!res.ok) throw new Error("Image upload failed");
+            const data = await res.json();
+            return data.imageUrl; // e.g. /uploads/162384783.jpg
+        }
+
+        // --- FETCH PRODUCTS --
         async function fetchProducts() {
             try {
                 const res = await fetch('/api/products');
-                const products = await res.json();
+                existingProducts = await res.json();
                 const tbody = document.getElementById('products-table');
                 
-                if (products.length === 0) {
+                if (existingProducts.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products in database.</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = products.map(p => `
+                tbody.innerHTML = existingProducts.map(p => `
                     <tr>
-                        <td><img src="${p.imageUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
+                        <td><img src="${p.imageUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></td>
                         <td style="font-weight: bold;">${p.name}</td>
                         <td>${p.category}</td>
                         <td>$${p.price}</td>
                         <td>${p.stock}</td>
-                        <td><button onclick="deleteProduct(${p.id})" style="color: red; background: none; border: none; cursor: pointer; text-decoration: underline;">Delete</button></td>
+                        <td style="display:flex; gap: 10px; padding-top: 1.5rem;">
+                            <button onclick="openEditModal(${p.id})" style="color: #9c3032; background: none; border: none; cursor: pointer; font-weight: bold;">Edit</button>
+                            <button onclick="deleteProduct(${p.id})" style="color: #666; background: none; border: none; cursor: pointer;">Delete</button>
+                        </td>
                     </tr>
                 `).join('');
             } catch (err) { console.error(err); }
         }
 
-        // Add Product Event
+        // --- ADD PRODUCT --
         document.getElementById('addProductForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const newProduct = {
-                name: document.getElementById('p_name').value,
-                description: document.getElementById('p_desc').value,
-                price: parseFloat(document.getElementById('p_price').value),
-                stock: parseInt(document.getElementById('p_stock').value),
-                category: document.getElementById('p_cat').value,
-                imageUrl: document.getElementById('p_img').value
-            };
+            const btn = document.getElementById('addSubmitBtn');
+            btn.disabled = true;
+            btn.innerText = "Uploading...";
 
             try {
+                // 1. Upload the image file first
+                const fileInput = document.getElementById('p_imageFile');
+                const uploadedImageUrl = await uploadFile(fileInput);
+
+                // 2. Submit product details
+                const newProduct = {
+                    name: document.getElementById('p_name').value,
+                    description: document.getElementById('p_desc').value,
+                    price: parseFloat(document.getElementById('p_price').value),
+                    stock: parseInt(document.getElementById('p_stock').value),
+                    category: document.getElementById('p_cat').value,
+                    imageUrl: uploadedImageUrl
+                };
+
                 const res = await fetch('/api/products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(newProduct)
                 });
+
                 if (res.ok) {
-                    alert("Product uploaded successfully!");
                     closeModal('addProductModal');
                     document.getElementById('addProductForm').reset();
-                    fetchProducts(); // refresh table
-                } else {
-                    const error = await res.json();
-                    alert("Failed to add product: " + (error.message || "Unauthorized"));
-                }
-            } catch (err) { console.error(err); alert("Error saving product."); }
+                    fetchProducts();
+                } else alert("Failed to add product.");
+            } catch (err) { console.error(err); alert("Error saving product. Check file size."); }
+            
+            btn.disabled = false;
+            btn.innerText = "Save Product";
         });
 
-        // Delete Product
+        // --- EDIT PRODUCT ---
+        function openEditModal(id) {
+            const product = existingProducts.find(p => p.id === id);
+            if(!product) return;
+            
+            document.getElementById('e_id').value = product.id;
+            document.getElementById('e_currentImage').value = product.imageUrl;
+            document.getElementById('e_name').value = product.name;
+            document.getElementById('e_desc').value = product.description;
+            document.getElementById('e_price').value = product.price;
+            document.getElementById('e_stock').value = product.stock;
+            document.getElementById('e_cat').value = product.category;
+            
+            openModal('editProductModal');
+        }
+
+        document.getElementById('editProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('e_id').value;
+            const btn = document.getElementById('editSubmitBtn');
+            btn.disabled = true;
+            btn.innerText = "Updating...";
+
+            try {
+                // If a new image is selected, upload it. Otherwise, keep current.
+                let finalImageUrl = document.getElementById('e_currentImage').value;
+                const fileInput = document.getElementById('e_imageFile');
+                
+                if(fileInput.files.length > 0) {
+                    finalImageUrl = await uploadFile(fileInput);
+                }
+
+                const updatedProduct = {
+                    name: document.getElementById('e_name').value,
+                    description: document.getElementById('e_desc').value,
+                    price: parseFloat(document.getElementById('e_price').value),
+                    stock: parseInt(document.getElementById('e_stock').value),
+                    category: document.getElementById('e_cat').value,
+                    imageUrl: finalImageUrl
+                };
+
+                const res = await fetch(`/api/products/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(updatedProduct)
+                });
+
+                if (res.ok) {
+                    closeModal('editProductModal');
+                    document.getElementById('editProductForm').reset();
+                    fetchProducts();
+                } else {
+                    const error = await res.json();
+                    alert("Update failed: " + error.message);
+                }
+            } catch (err) { console.error(err); alert("Error updating product."); }
+            
+            btn.disabled = false;
+            btn.innerText = "Update Product";
+        });
+
+        // --- DELETE PRODUCT ---
         async function deleteProduct(id) {
-            if(confirm("Are you sure you want to delete this product?")) {
+            if(confirm("Are you sure you want to delete this product forever?")) {
                 const res = await fetch(`/api/products/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if(res.ok) fetchProducts();
-                else alert("Failed. Usually means you are not logged in as Admin.");
             }
         }
 
-        // Fetch Orders
+        // --- FETCH ORDERS ---
         async function fetchOrders() {
             const tbody = document.getElementById('orders-table');
             try {
                 const res = await fetch('/api/orders', { headers: { 'Authorization': `Bearer ${token}` } });
-                if(!res.ok) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Unauthorized to view orders.</td></tr>'; return; }
                 const data = await res.json();
-                if(data.length === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No orders found.</td></tr>';
-                else {
-                    tbody.innerHTML = data.map(o => `
-                        <tr>
-                            <td>#${o.id}</td>
-                            <td>${o.userId}</td>
-                            <td>$${o.totalAmount}</td>
-                            <td><strong>${o.status}</strong></td>
-                            <td>
-                                <select onchange="updateOrderStatus(${o.id}, this.value)">
-                                    <option value="" disabled selected>Change Status</option>
-                                    <option value="Processing">Processing</option>
-                                    <option value="Shipped">Shipped</option>
-                                    <option value="Delivered">Delivered</option>
-                                </select>
-                            </td>
-                        </tr>
-                    `).join('');
-                }
+                if(!res.ok || data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No orders found.</td></tr>'; return; }
+                tbody.innerHTML = data.map(o => `
+                    <tr>
+                        <td>#${o.id}</td>
+                        <td style="font-weight:bold; color: #9c3032;">$${o.totalAmount}</td>
+                        <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.shippingAddress}</td>
+                        <td><strong>${o.status}</strong></td>
+                        <td>
+                            <select onchange="updateOrderStatus(${o.id}, this.value)">
+                                <option value="" disabled selected>Change Status</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('');
             } catch (err) { console.error(err); }
         }
 
@@ -281,32 +419,29 @@
             if(res.ok) fetchOrders();
         }
 
-        // Fetch Requests
+        // --- FETCH REQUESTS ---
         async function fetchRequests() {
             const tbody = document.getElementById('requests-table');
             try {
                 const res = await fetch('/api/requests', { headers: { 'Authorization': `Bearer ${token}` } });
-                if(!res.ok) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Unauthorized.</td></tr>'; return; }
                 const data = await res.json();
-                if(data.length === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No requests found.</td></tr>';
-                else {
-                    tbody.innerHTML = data.map(r => `
-                        <tr>
-                            <td>#${r.id}</td>
-                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${r.description}</td>
-                            <td>${r.designUrl ? `<a href="${r.designUrl}" target="_blank">View Image</a>` : 'N/A'}</td>
-                            <td><strong>${r.status}</strong></td>
-                            <td>
-                                <select onchange="updateRequestStatus(${r.id}, this.value)">
-                                    <option value="" disabled selected>Change Status</option>
-                                    <option value="Reviewed">Reviewed</option>
-                                    <option value="Accepted">Accepted</option>
-                                    <option value="Rejected">Rejected</option>
-                                </select>
-                            </td>
-                        </tr>
-                    `).join('');
-                }
+                if(!res.ok || data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No requests found.</td></tr>'; return; }
+                tbody.innerHTML = data.map(r => `
+                    <tr>
+                        <td>#${r.id}</td>
+                        <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${r.description}</td>
+                        <td>${r.designUrl ? `<a href="${r.designUrl}" target="_blank" style="color:blue;">View Link</a>` : 'N/A'}</td>
+                        <td><strong>${r.status}</strong></td>
+                        <td>
+                            <select onchange="updateRequestStatus(${r.id}, this.value)">
+                                <option value="" disabled selected>Change Status</option>
+                                <option value="Reviewed">Reviewed</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('');
             } catch(e) { console.error(e); }
         }
 
@@ -319,7 +454,7 @@
             if(res.ok) fetchRequests();
         }
 
-        // Initialize
+        // Initialize admin tables
         fetchProducts();
     </script>
 </body>

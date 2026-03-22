@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { connectDB, sequelize } = require('./config/db');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // Initialize Express App
 const app = express();
@@ -37,6 +40,21 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/requests', customRequestRoutes);
+
+// Setup Multer for Admin Image Uploads
+const uploadDir = path.join(__dirname, 'public/uploads');
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'public/uploads/'),
+    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+const upload = multer({ storage });
+
+app.post('/api/upload', upload.single('image'), (req, res) => {
+    if(!req.file) return res.status(400).json({message: 'No file uploaded'});
+    res.json({ imageUrl: `/uploads/${req.file.filename}` });
+});
 
 // Set Port
 const PORT = process.env.PORT || 5000;
