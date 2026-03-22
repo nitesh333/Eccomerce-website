@@ -59,6 +59,12 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
     res.json({ imageUrl: `/uploads/${req.file.filename}` });
 });
 
+// Global Error Handler to force JSON responses on crashes instead of HTML stack traces
+app.use((err, req, res, next) => {
+    console.error("Express Error:", err.message);
+    res.status(500).json({ message: err.message || "Internal Server Error" });
+});
+
 // Set Port
 const PORT = process.env.PORT || 5000;
 
